@@ -1,7 +1,7 @@
-import { ApolloClient, InMemoryCache, split } from "@apollo/client";
-import { HttpLink } from "@apollo/client/link/http";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { getMainDefinition } from "@apollo/client/utilities";
+import {ApolloClient, InMemoryCache, split} from "@apollo/client";
+import {HttpLink} from "@apollo/client/link/http";
+import {WebSocketLink} from "@apollo/client/link/ws";
+import {getMainDefinition} from "@apollo/client/utilities";
 
 const GRAPHQL_API_URL = process.env.NEXT_PUBLIC_HASURA_GRAPQL_ENDPOINT;
 
@@ -30,7 +30,7 @@ const wsLink = new WebSocketLink({
 });
 
 const link = split(
-    ({ query }) => {
+    ({query}) => {
         const definition = getMainDefinition(query);
         return (
             definition.kind === "OperationDefinition" &&

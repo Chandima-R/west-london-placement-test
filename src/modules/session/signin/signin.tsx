@@ -11,6 +11,9 @@ import {Button} from "@/components/ui/button";
 import {InputField} from "@/modules/shared/text-input";
 import {PasswordInput} from "@/modules/shared/password-input";
 import {Loader2} from "lucide-react";
+import {signIn, useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
+
 
 const FormSchema = z.object({
     email: z.string().email().min(5, {
@@ -23,6 +26,12 @@ const FormSchema = z.object({
 
 export const Signin = () => {
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const {data: session} = useSession();
+
+    if (session?.user) {
+        router.push("/dashboard");
+    }
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -32,10 +41,26 @@ export const Signin = () => {
         },
     })
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
         setLoading(true);
-        console.log(data)
-        setTimeout(() => setLoading(false), 5000);
+        try {
+            const result = await signIn("credentials", {
+                redirect: false,
+                email: data.email,
+                password: data.password,
+            });
+
+            if (result?.error) {
+                console.log(result?.error);
+                return;
+            }
+            setTimeout(() => setLoading(false), 5000);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+
     }
 
     return (
@@ -71,6 +96,7 @@ export const Signin = () => {
                                 required
                             />
                             <Button
+                                disabled={loading}
                                 type="submit"
                                 className="w-full h-10 bg-blue-950 hover:bg-blue-800 text-white font-semibold py-3 rounded-xs transition-all flex items-center justify-center"
                             >

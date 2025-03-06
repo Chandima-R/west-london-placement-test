@@ -35,7 +35,7 @@ export const InputField = ({
                     <FormControl>
                         <Input
                             disabled={disabled}
-                            className="h-8 bg-white text-xs focus:ring-red-900 focus:border-red-900 border-gray-300 focus:shadow-none hover:border-red-900"
+                            className="h-10 rounded-xs bg-white text-xs focus:ring-red-900 focus:border-red-900 border-gray-300 focus:shadow-none hover:border-red-900"
                             placeholder={placeholder}
                             {...field}
                         />

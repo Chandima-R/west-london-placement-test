@@ -42,7 +42,7 @@ export const PasswordInput = ({
                     <FormControl>
                         <div style={{position: "relative"}}>
                             <Input
-                                className={"h-9 bg-white text-xs"}
+                                className={"h-10 rounded-xs bg-white text-xs"}
                                 placeholder={placeholder}
                                 type={showPassword ? "text" : "password"}
                                 {...field}

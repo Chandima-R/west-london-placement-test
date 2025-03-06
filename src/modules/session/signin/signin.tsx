@@ -1,21 +1,42 @@
 'use client'
 
+import {zodResolver} from "@hookform/resolvers/zod"
+import {useForm} from "react-hook-form"
+import {z} from "zod"
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {Label} from "@/components/ui/label";
-import {Loader2} from "lucide-react";
 import {useState} from "react";
 import Image from "next/image";
+import {Form} from "@/components/ui/form";
+import {Button} from "@/components/ui/button";
+import {InputField} from "@/modules/shared/text-input";
+import {PasswordInput} from "@/modules/shared/password-input";
+import {Loader2} from "lucide-react";
+
+const FormSchema = z.object({
+    email: z.string().email().min(5, {
+        message: "Email must be at least 5 characters.",
+    }),
+    password: z.string().min(8, {
+        message: "Password must be at least 8 characters.",
+    }),
+});
 
 export const Signin = () => {
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            email: "",
+            password: ""
+        },
+    })
+
+    function onSubmit(data: z.infer<typeof FormSchema>) {
         setLoading(true);
-        setTimeout(() => setLoading(false), 2000); // Simulating API call
-    };
+        console.log(data)
+        setTimeout(() => setLoading(false), 5000);
+    }
 
     return (
         <div
@@ -33,34 +54,30 @@ export const Signin = () => {
                 </CardHeader>
 
                 <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <Label htmlFor="email" className="text-gray-700">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="Enter your email"
-                                className="mt-2 bg-gray-50 border-gray-300 text-gray-900 rounded-xs"
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                            <InputField
+                                name="email"
+                                label="Email"
+                                placeholder="someone@example.com"
+                                control={form.control}
                                 required
                             />
-                        </div>
-                        <div>
-                            <Label htmlFor="password" className="text-gray-700">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="Enter your password"
-                                className="mt-2 bg-gray-50 border-gray-300 text-gray-900"
+                            <PasswordInput
+                                name="password"
+                                label="Password"
+                                placeholder="password"
+                                control={form.control}
                                 required
                             />
-                        </div>
-                        <Button
-                            type="submit"
-                            className="w-full bg-blue-950 hover:bg-blue-800 text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center"
-                        >
-                            {loading ? <Loader2 className="animate-spin h-5 w-5"/> : "Sign In"}
-                        </Button>
-                    </form>
+                            <Button
+                                type="submit"
+                                className="w-full h-10 bg-blue-950 hover:bg-blue-800 text-white font-semibold py-3 rounded-xs transition-all flex items-center justify-center"
+                            >
+                                {loading ? <Loader2 className="animate-spin h-5 w-5"/> : "Sign In"}
+                            </Button>
+                        </form>
+                    </Form>
                 </CardContent>
             </Card>
         </div>

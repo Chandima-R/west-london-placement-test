@@ -20,8 +20,6 @@ import {ChevronDown} from "lucide-react";
 export const Navbar = () => {
     const {data: session} = useSession();
     const pathname = usePathname();
-    const route = pathname.split("/")[2];
-    console.log(route);
 
     const email = session?.user?.email;
 

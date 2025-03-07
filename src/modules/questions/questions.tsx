@@ -27,9 +27,7 @@ export const Questions = () => {
             setUserDetails(JSON.parse(storedData));
         }
     }, []);
-
-    console.log(userDetails);
-
+    
     const [activeTab, setActiveTab] = useState("page1");
     const tabs = ["page1", "page2", "page3", "page4", "page5"];
 

@@ -51,3 +51,15 @@ export const ADD_ANSWER = gql`
         }
     }
 `
+
+export const VIEW_ANSWERS_BY_CANDIDATE_EMAIL = gql`
+    subscription viewAnswerByCandidateEmail($_eq: String) {
+        answers(where: {candidate_email: {_eq: $_eq}}) {
+            answer
+            candidate_email
+            id
+            question_id
+        }
+    }
+
+`

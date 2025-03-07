@@ -20,7 +20,7 @@ import {ADD_QUESTION, VIEW_ALL_QUESTIONS} from "@/graphql";
 import {toast} from 'react-toastify';
 import {useState} from "react";
 import {Loader2} from "lucide-react";
-import {Loader} from "@/modules/shared/loader"; // Importing toast from react-toastify
+import {Loader} from "@/modules/shared/loader";
 
 const FormSchema = z.object({
     question: z.string().nonempty({
@@ -162,7 +162,6 @@ export const QuestionsView = () => {
                         {
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             questionsData?.question?.map((question: any, index: number) => {
-                                console.log(question);
                                 return (
                                     <div key={index} className={'shadow rounded-xs p-2'}>
                                         <p className={'text-xs'}><span>{index + 1}. </span>{question.question}</p>

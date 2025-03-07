@@ -17,6 +17,9 @@ import {TextAreaInput} from "@/modules/shared/text-area-input";
 import {InputField} from "@/modules/shared/text-input";
 import {useMutation} from "@apollo/client";
 import {ADD_QUESTION} from "@/graphql";
+import {toast} from 'react-toastify';
+import {useState} from "react";
+import {Loader2} from "lucide-react"; // Importing toast from react-toastify
 
 const FormSchema = z.object({
     question: z.string().nonempty({
@@ -45,14 +48,13 @@ export const QuestionsView = () => {
             answer1: "",
             answer2: "",
             answer3: "",
-
         },
     })
-
+    const [loading, setLoading] = useState(false);
     const [insertQuestion] = useMutation(ADD_QUESTION)
 
-
     async function onSubmit(data: z.infer<typeof FormSchema>) {
+        setLoading(true);
         try {
             await insertQuestion({
                 variables: {
@@ -64,9 +66,31 @@ export const QuestionsView = () => {
                     created_at: new Date(),
                 }
             })
+            setTimeout(() => setLoading(false), 5000);
+
             form.reset()
+
+            toast.success("Question added successfully!", {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
         } catch (err) {
             console.error(err)
+            toast.error("Failed to add question. Please try again.", {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -92,7 +116,7 @@ export const QuestionsView = () => {
                         </DialogHeader>
 
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full  space-y-4">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
                                 <div className={'flex items-start justify-between gap-4'}>
                                     <div className={'w-full'}>
                                         <TextAreaInput control={form.control} label={'Question'} name={'question'}
@@ -112,8 +136,16 @@ export const QuestionsView = () => {
                                 </div>
                                 <div className={'w-full flex justify-end'}>
                                     <Button type="submit"
-                                            className="w-auto h-10 border border-blue-950 text-blue-950 hover:bg-blue-950  bg-transparent  cursor-pointer hover:text-white hover:border-blue-800 transition-all font-semibold py-3 rounded-xs flex items-center justify-center"
-                                    >Add Question</Button>
+                                            disabled={loading}
+                                            className="w-auto h-10 border border-blue-950 text-blue-950 hover:bg-blue-950 bg-transparent cursor-pointer hover:text-white hover:border-blue-800 transition-all font-semibold py-3 rounded-xs flex items-center justify-center"
+                                    >{
+                                        loading ? (
+                                                <>
+                                                    <Loader2 className="animate-spin h-5 w-5"/>
+                                                    <span>Adding Question</span></>
+                                            )
+                                            : 'Add Question'
+                                    }</Button>
                                 </div>
                             </form>
                         </Form>

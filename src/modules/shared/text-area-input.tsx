@@ -32,7 +32,7 @@ export const TextAreaInput = ({
                         <Textarea
                             placeholder={placeholder}
                             {...field}
-                            className="min-h-64 !text-xs h-auto rounded-xs"
+                            className="min-h-64 !text-xs h-auto rounded-xs bg-white focus:ring-blue-900 focus:border-blue-900 border-gray-300 focus:shadow-none hover:border-blue-900"
                         />
                     </FormControl>
                     <FormMessage/>

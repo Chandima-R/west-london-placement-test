@@ -7,3 +7,24 @@ export const ADD_NEW_CANDIDATE = gql`
         }
     }
 `
+
+export const VIEW_ALL_CANDIDATES = gql`
+    subscription viewAllCandidates {
+        candidate {
+            contact_number
+            created_at
+            email
+            firstname
+            id
+            lastname
+        }
+    }
+`
+
+export const ADD_QUESTION = gql`
+    mutation addQuestion($question: String, $correct_answer: String, $answer_two: String, $answer_three: String, $answer_one: String, $created_at: String) {
+        insert_question(objects: {answer_one: $answer_one, question: $question, correct_answer: $correct_answer, answer_two: $answer_two, answer_three: $answer_three, created_at: $created_at}) {
+            affected_rows
+        }
+    }
+`

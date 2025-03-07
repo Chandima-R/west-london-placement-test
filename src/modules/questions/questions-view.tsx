@@ -15,25 +15,59 @@ import {z} from "zod"
 import {Form,} from "@/components/ui/form"
 import {TextAreaInput} from "@/modules/shared/text-area-input";
 import {InputField} from "@/modules/shared/text-input";
+import {useMutation} from "@apollo/client";
+import {ADD_QUESTION} from "@/graphql";
 
 const FormSchema = z.object({
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+    question: z.string().nonempty({
+        message: "Question is required.",
     }),
-})
-
+    correct_answer: z.string().nonempty({
+        message: "Correct answer is required.",
+    }),
+    answer1: z.string().nonempty({
+        message: "Answer 1 is required.",
+    }),
+    answer2: z.string().nonempty({
+        message: "Answer 2 is required.",
+    }),
+    answer3: z.string().nonempty({
+        message: "Answer 3 is required.",
+    }),
+});
 
 export const QuestionsView = () => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            username: "",
+            question: "",
+            correct_answer: "",
+            answer1: "",
+            answer2: "",
+            answer3: "",
+
         },
     })
 
+    const [insertQuestion] = useMutation(ADD_QUESTION)
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data)
+
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
+        try {
+            await insertQuestion({
+                variables: {
+                    question: data.question,
+                    correct_answer: data.correct_answer,
+                    answer_one: data.answer1,
+                    answer_two: data.answer2,
+                    answer_three: data.answer3,
+                    created_at: new Date(),
+                }
+            })
+            form.reset()
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     return (

@@ -2,7 +2,7 @@ import type {Metadata} from "next";
 import {Arimo} from "next/font/google";
 import "../globals.css";
 import {Providers} from "@/modules/shared/provider";
-import {Toaster} from "@/components/ui/sonner";
+import {ToastContainer} from "react-toastify";
 
 const arimo = Arimo({
     variable: "--font-arimo-mono",
@@ -30,7 +30,7 @@ export default function RootLayout({
         <body
             className={`${arimo.variable} antialiased`}
         >
-        <Toaster/>
+        <ToastContainer/>
         <Providers>
             <div className={'bg-gradient-to-br from-gray-200 via-gray-100 to-white p-6 min-h-screen h-full'}>
                 {children}

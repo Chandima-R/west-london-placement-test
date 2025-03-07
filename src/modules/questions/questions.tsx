@@ -11,6 +11,7 @@ import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Label} from "@/components/ui/label";
 import {useRouter} from "next/navigation";
 import {Loader} from "@/modules/shared/loader";
+import {toast} from "react-toastify";
 
 export const Questions = () => {
     const [userDetails, setUserDetails] = useState({
@@ -86,6 +87,14 @@ export const Questions = () => {
                 }
             });
         }
+        toast.success("You have successfully completed your placement test. You will redirect to the results screen shortly.", {
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
         router.push('/results');
     };
 
@@ -105,7 +114,6 @@ export const Questions = () => {
                        className="w-48 h-auto "/>
             </div>
 
-            {/* Timer UI */}
             <div className="text-center text-xl font-semibold text-red-600">
                 Time Left: {formatTime(timeLeft)}
             </div>

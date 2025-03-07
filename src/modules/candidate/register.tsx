@@ -13,6 +13,7 @@ import {motion} from "motion/react"
 import {useMutation} from "@apollo/client";
 import {ADD_NEW_CANDIDATE} from "@/graphql";
 import {useRouter} from "next/navigation";
+import {toast} from "react-toastify";
 
 const FormSchema = z.object({
     firstname: z.string().min(2, {
@@ -62,8 +63,19 @@ export const Register = () => {
             sessionStorage.setItem('userDetails', JSON.stringify(data));
             sessionStorage.setItem('user_progress', 'details_completed');
             router.push('/questions');
-        } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
             console.error(error);
+            if (error.message.includes("candidate_email_key")) {
+                toast.error("You have already used this email for registration. Please try again with a new email.", {
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         } finally {
             setLoading(false);
         }

@@ -1,7 +1,7 @@
 import type {Metadata} from "next";
 import "../globals.css";
 import {Providers} from "@/modules/shared/provider";
-import {Toaster} from "@/components/ui/sonner";
+import {ToastContainer} from "react-toastify";
 
 export const metadata: Metadata = {
     title: "West London - IELTS | Signin",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: { children: React.ReactNode }) {
     return (
         <html lang="en">
-        <Toaster/>
+        <ToastContainer/>
         <Providers>
             <body className={`antialiased`}>
             {children}

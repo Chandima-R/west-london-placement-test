@@ -1,5 +1,9 @@
+import {CandidateDataTable} from "@/modules/candidate/candidate-data-table";
+
 export default function page() {
     return (
-        <div>candidates</div>
+        <div>
+            <CandidateDataTable/>
+        </div>
     )
 }

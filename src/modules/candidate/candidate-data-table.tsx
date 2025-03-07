@@ -13,7 +13,7 @@ type Candidate = {
     lastname: string;
     email: string;
     contact_number: string;
-    score?: number; // Score is computed dynamically
+    score?: number;
 };
 
 export const getColumns = (): ColumnDef<Candidate>[] => {
@@ -24,7 +24,7 @@ export const getColumns = (): ColumnDef<Candidate>[] => {
             cell: ({row}) => {
                 const {firstname, lastname} = row.original;
                 return (
-                    <p className="text-blue-900 hover:underline font-semibold cursor-pointer">
+                    <p className="text-blue-900 hover:underline font-semibold cursor-pointer capitalize">
                         {firstname} {lastname}
                     </p>
                 );
@@ -49,13 +49,10 @@ export const getColumns = (): ColumnDef<Candidate>[] => {
 export const CandidateDataTable = () => {
     const columns = getColumns();
 
-    // Fetch all candidates
     const {data: candidateData, loading: candidateDataLoading} = useSubscription(VIEW_ALL_CANDIDATES);
 
-    // Fetch all questions
     const {data: questionsData} = useSubscription(VIEW_ALL_QUESTIONS);
 
-    // Fetch all answers (instead of individual subscriptions per candidate)
     const {data: answersData} = useSubscription(VIEW_ALL_ANSWERS);
 
     const [candidatesWithScores, setCandidatesWithScores] = useState<Candidate[]>([]);
@@ -100,6 +97,7 @@ export const CandidateDataTable = () => {
                 loading={candidateDataLoading}
                 pageIndex={pageIndex}
                 table={table}
+                searchFilter={'email'}
             />
         </div>
     );

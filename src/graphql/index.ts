@@ -28,3 +28,18 @@ export const ADD_QUESTION = gql`
         }
     }
 `
+
+export const VIEW_ALL_QUESTIONS = gql`
+    subscription viewAllQuestions {
+        question {
+            answer_one
+            answer_three
+            answer_two
+            correct_answer
+            created_at
+            id
+            question
+        }
+    }
+
+`

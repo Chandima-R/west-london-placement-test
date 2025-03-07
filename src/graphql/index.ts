@@ -61,5 +61,17 @@ export const VIEW_ANSWERS_BY_CANDIDATE_EMAIL = gql`
             question_id
         }
     }
+`
 
+export const VIEW_ALL_ANSWERS = gql`
+    subscription MySubscription
+    {
+        answers
+        {
+            answer
+            candidate_email
+            id
+            question_id
+        }
+    }
 `

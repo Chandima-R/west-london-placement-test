@@ -41,5 +41,25 @@ export const VIEW_ALL_QUESTIONS = gql`
             question
         }
     }
+`
+
+
+export const ADD_ANSWER = gql`
+    mutation addAnswer($answer: String, $question_id: uuid, $candidate_email: String) {
+        insert_answers(objects: {answer: $answer, question_id: $question_id, candidate_email: $candidate_email}) {
+            affected_rows
+        }
+    }
+`
+
+export const VIEW_ANSWERS_BY_CANDIDATE_EMAIL = gql`
+    subscription viewAnswerByCandidateEmail($_eq: String) {
+        answers(where: {candidate_email: {_eq: $_eq}}) {
+            answer
+            candidate_email
+            id
+            question_id
+        }
+    }
 
 `

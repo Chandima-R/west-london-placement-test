@@ -3,6 +3,7 @@ import {Arimo} from "next/font/google";
 import "../globals.css";
 import {Providers} from "@/modules/shared/provider";
 import {Toaster} from "@/components/ui/sonner";
+import {Navbar} from "@/modules/dashboard/navbar";
 
 const arimo = Arimo({
     variable: "--font-arimo-mono",
@@ -30,7 +31,10 @@ export default function RootLayout({
         <body className={`${arimo.variable} antialiased`}>
         <Toaster/>
         <Providers>
-            {children}
+            <Navbar/>
+            <div className={'mt-16 p-4 bg-gradient-to-br from-gray-200 via-gray-100 to-white min-h-screen h-full'}>
+                {children}
+            </div>
         </Providers>
         </body>
         </html>

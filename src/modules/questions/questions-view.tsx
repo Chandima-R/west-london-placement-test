@@ -160,6 +160,7 @@ export const QuestionsView = () => {
                 questionsDataLoading ? <Loader/> : (
                     <div className={'grid grid-cols-5 gap-4 mt-4'}>
                         {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             questionsData?.question?.map((question: any, index: number) => {
                                 console.log(question);
                                 return (

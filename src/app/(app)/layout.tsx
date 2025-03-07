@@ -32,7 +32,9 @@ export default function RootLayout({
         >
         <Toaster/>
         <Providers>
-            {children}
+            <div className={'bg-gradient-to-br from-gray-200 via-gray-100 to-white p-6 min-h-screen h-full'}>
+                {children}
+            </div>
         </Providers>
         </body>
         </html>

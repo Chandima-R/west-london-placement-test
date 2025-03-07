@@ -15,11 +15,12 @@ import {z} from "zod"
 import {Form,} from "@/components/ui/form"
 import {TextAreaInput} from "@/modules/shared/text-area-input";
 import {InputField} from "@/modules/shared/text-input";
-import {useMutation} from "@apollo/client";
-import {ADD_QUESTION} from "@/graphql";
+import {useMutation, useSubscription} from "@apollo/client";
+import {ADD_QUESTION, VIEW_ALL_QUESTIONS} from "@/graphql";
 import {toast} from 'react-toastify';
 import {useState} from "react";
-import {Loader2} from "lucide-react"; // Importing toast from react-toastify
+import {Loader2} from "lucide-react";
+import {Loader} from "@/modules/shared/loader"; // Importing toast from react-toastify
 
 const FormSchema = z.object({
     question: z.string().nonempty({
@@ -94,10 +95,12 @@ export const QuestionsView = () => {
         }
     }
 
+    const {data: questionsData, loading: questionsDataLoading} = useSubscription(VIEW_ALL_QUESTIONS)
+
     return (
         <div>
             <div className={'flex items-start justify-between'}>
-                <h2 className={'font-semibold text-md'}>Questions</h2>
+                <h2 className={'font-semibold text-md'}>Questions List</h2>
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button
@@ -150,9 +153,42 @@ export const QuestionsView = () => {
                             </form>
                         </Form>
                     </DialogContent>
-
                 </Dialog>
             </div>
+
+            {
+                questionsDataLoading ? <Loader/> : (
+                    <div className={'grid grid-cols-5 gap-4 mt-4'}>
+                        {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            questionsData?.question?.map((question: any, index: number) => {
+                                console.log(question);
+                                return (
+                                    <div key={index} className={'shadow rounded-xs p-2'}>
+                                        <p className={'text-xs'}><span>{index + 1}. </span>{question.question}</p>
+
+                                        <div className={'flex flex-col gap-2 mt-2'}>
+                                            {[
+                                                {label: 'a', text: question.correct_answer},
+                                                {label: 'b', text: question.answer_one},
+                                                {label: 'c', text: question.answer_two},
+                                                {label: 'd', text: question.answer_three},
+                                            ]
+                                                .sort(() => Math.random() - 0.5)
+                                                .map((answer, index) => (
+                                                    <p key={index} className={'text-xs'}>
+                                                        {String.fromCharCode(97 + index)}. {answer.text}
+                                                    </p>
+                                                ))}
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                )
+            }
+
         </div>
     )
 }

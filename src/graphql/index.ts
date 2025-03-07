@@ -7,3 +7,16 @@ export const ADD_NEW_CANDIDATE = gql`
         }
     }
 `
+
+export const VIEW_ALL_CANDIDATES = gql`
+    subscription viewAllCandidates {
+        candidate {
+            contact_number
+            created_at
+            email
+            firstname
+            id
+            lastname
+        }
+    }
+`

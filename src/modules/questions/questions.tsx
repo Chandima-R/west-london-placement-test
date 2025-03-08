@@ -12,6 +12,7 @@ import {Label} from "@/components/ui/label";
 import {useRouter} from "next/navigation";
 import {Loader} from "@/modules/shared/loader";
 import {toast} from "react-toastify";
+import {Loader2} from "lucide-react";
 
 export const Questions = () => {
     const [userDetails, setUserDetails] = useState({
@@ -21,9 +22,10 @@ export const Questions = () => {
         contact: ""
     });
     const [answers, setAnswers] = useState<{ [questionId: string]: string }>({});
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
-    const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes in seconds
+    const [timeLeft, setTimeLeft] = useState(30 * 60);
 
     useEffect(() => {
         const storedData = sessionStorage.getItem('userDetails');
@@ -75,28 +77,40 @@ export const Questions = () => {
         }));
     };
 
-    const [insert_asnwer] = useMutation(ADD_ANSWER);
+    const [insert_answer] = useMutation(ADD_ANSWER);
 
     const handleSubmit = async () => {
-        for (const [questionId, answer] of Object.entries(answers)) {
-            await insert_asnwer({
-                variables: {
-                    candidate_email: userDetails?.email,
-                    question_id: questionId,
-                    answer: answer,
-                }
+        setIsLoading(true);
+
+        try {
+            for (const [questionId, answer] of Object.entries(answers)) {
+                await insert_answer({
+                    variables: {
+                        candidate_email: userDetails?.email,
+                        question_id: questionId,
+                        answer: answer,
+                    }
+                });
+            }
+
+            toast.success("You have successfully completed your placement test. You will be redirected to the results screen shortly.", {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
             });
+
+            router.push('/results');
+        } catch (error) {
+            console.error("Error submitting answers:", error);
+            toast.error("An error occurred while submitting your answers. Please try again.");
+        } finally {
+            setIsLoading(false); // Stop loading
         }
-        toast.success("You have successfully completed your placement test. You will redirect to the results screen shortly.", {
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-        router.push('/results');
     };
+
 
     const {data: questionsData, loading: questionsDataLoading} = useSubscription(VIEW_ALL_QUESTIONS);
 
@@ -109,13 +123,16 @@ export const Questions = () => {
 
     return (
         <div>
-            <div className={'w-full flex items-center justify-center mx-auto'}>
+            <div className={'w-full flex items-center justify-center mx-auto relative'}>
                 <Image src="/images/logo/west-london-logo.png" alt="west london - ielsts" width={1000} height={1000}
                        className="w-48 h-auto "/>
-            </div>
-
-            <div className="text-center text-xl font-semibold text-red-600">
-                Time Left: {formatTime(timeLeft)}
+                <div className="text-center text-xl font-semibold text-red-600 absolute right-2 top-4">
+                    <p className={'flex flex-col'}>
+                        Time Left: <span className={'text-4xl'}>
+                    {formatTime(timeLeft)}
+                </span>
+                    </p>
+                </div>
             </div>
 
             <div>
@@ -192,10 +209,17 @@ export const Questions = () => {
                                                 </Button>
                                             ) : (
                                                 <Button
+                                                    disabled={isLoading}
                                                     className="h-10 bg-blue-950 hover:bg-blue-800 text-white font-semibold py-3 rounded-xs transition-all flex items-center justify-center"
                                                     onClick={handleSubmit}
                                                 >
-                                                    Submit Answers
+                                                    {isLoading ?
+                                                        <>
+                                                            <Loader2 className="animate-spin h-5 w-5 mr-2"/>
+                                                            <span>Submitting</span>
+                                                        </> : (
+                                                            'Submit Answers'
+                                                        )}
                                                 </Button>
                                             )}
                                         </CardFooter>
@@ -264,10 +288,17 @@ export const Questions = () => {
                                                 </Button>
                                             ) : (
                                                 <Button
+                                                    disabled={isLoading}
                                                     className="h-10 bg-blue-950 hover:bg-blue-800 text-white font-semibold py-3 rounded-xs transition-all flex items-center justify-center"
                                                     onClick={handleSubmit}
                                                 >
-                                                    Submit Answers
+                                                    {isLoading ?
+                                                        <>
+                                                            <Loader2 className="animate-spin h-5 w-5 mr-2"/>
+                                                            <span>Submitting</span>
+                                                        </> : (
+                                                            'Submit Answers'
+                                                        )}
                                                 </Button>
                                             )}
                                         </CardFooter>
@@ -336,10 +367,17 @@ export const Questions = () => {
                                                 </Button>
                                             ) : (
                                                 <Button
+                                                    disabled={isLoading}
                                                     className="h-10 bg-blue-950 hover:bg-blue-800 text-white font-semibold py-3 rounded-xs transition-all flex items-center justify-center"
                                                     onClick={handleSubmit}
                                                 >
-                                                    Submit Answers
+                                                    {isLoading ?
+                                                        <>
+                                                            <Loader2 className="animate-spin h-5 w-5 mr-2"/>
+                                                            <span>Submitting</span>
+                                                        </> : (
+                                                            'Submit Answers'
+                                                        )}
                                                 </Button>
                                             )}
                                         </CardFooter>
@@ -408,10 +446,17 @@ export const Questions = () => {
                                                 </Button>
                                             ) : (
                                                 <Button
+                                                    disabled={isLoading}
                                                     className="h-10 bg-blue-950 hover:bg-blue-800 text-white font-semibold py-3 rounded-xs transition-all flex items-center justify-center"
                                                     onClick={handleSubmit}
                                                 >
-                                                    Submit Answers
+                                                    {isLoading ?
+                                                        <>
+                                                            <Loader2 className="animate-spin h-5 w-5 mr-2"/>
+                                                            <span>Submitting</span>
+                                                        </> : (
+                                                            'Submit Answers'
+                                                        )}
                                                 </Button>
                                             )}
                                         </CardFooter>
@@ -480,10 +525,17 @@ export const Questions = () => {
                                                 </Button>
                                             ) : (
                                                 <Button
+                                                    disabled={isLoading}
                                                     className="h-10 bg-blue-950 hover:bg-blue-800 text-white font-semibold py-3 rounded-xs transition-all flex items-center justify-center"
                                                     onClick={handleSubmit}
                                                 >
-                                                    Submit Answers
+                                                    {isLoading ?
+                                                        <>
+                                                            <Loader2 className="animate-spin h-5 w-5 mr-2"/>
+                                                            <span>Submitting</span>
+                                                        </> : (
+                                                            'Submit Answers'
+                                                        )}
                                                 </Button>
                                             )}
                                         </CardFooter>
